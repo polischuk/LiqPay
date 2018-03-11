@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace LiqPay.Models.Requests
 {
@@ -10,7 +11,8 @@ namespace LiqPay.Models.Requests
         [JsonProperty("amount")]
         public decimal Amount { get; set; }
         [JsonProperty("currency")]
-        public string Currency { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public Currency Currency { get; set; }
         [JsonProperty("description")]
         public string Description { get; set; }
         [JsonProperty("card")]

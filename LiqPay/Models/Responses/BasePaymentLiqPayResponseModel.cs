@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace LiqPay.Models.Responses
 {
@@ -39,6 +40,7 @@ namespace LiqPay.Models.Responses
         [JsonProperty("amount")]
         public int Amount { get; set; }
         [JsonProperty("currency")]
+        [JsonConverter(typeof(StringEnumConverter))]
         public string Currency { get; set; }
         [JsonProperty("sender_commission")]
         public decimal SenderCommission { get; set; }

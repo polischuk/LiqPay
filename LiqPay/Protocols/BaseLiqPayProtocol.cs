@@ -7,10 +7,11 @@ using LiqPay.Contracts;
 using LiqPay.Extensions;
 using LiqPay.Models.Requests;
 using LiqPay.Models.Responses;
+using RestSharp;
 
 namespace LiqPay.Protocols
 {
-    public abstract class BaseLiqPayProtocol : RequestManager, IBaseLiqPayProtocol
+    public abstract class BaseLiqPayProtocol : IBaseLiqPayProtocol
     {
         protected readonly string PublicKey;
         protected readonly string BaseUrl = "https://www.liqpay.com/api/request";
@@ -39,7 +40,7 @@ namespace LiqPay.Protocols
                 data = base64String,
                 signature = ComputeSignature(base64String, model.PrivateKey ?? PrivateKey)
             };
-            var response = PostRequestWithData<TResponse>(BaseUrl, requestModel, 60000);
+            var response = ExecutePostWithData<TResponse>(BaseUrl, requestModel, 60000);
             return response.StatusCode == HttpStatusCode.OK
                 ? response.Data
                 : throw new HttpRequestException(response.StatusCode.ToString());
@@ -69,6 +70,25 @@ namespace LiqPay.Protocols
             var sha1Res = sha1.ComputeHash(Encoding.UTF8.GetBytes(str));
             var sha1ResString = Convert.ToBase64String(sha1Res);
             return sha1ResString;
+        }
+        private IRestResponse<T> ExecutePostWithData<T>(string url, object data, int timeout = 30000) where T : new()
+        {
+            var client = new RestClient(url);
+            var request = CreateRestRequest(Method.POST, timeout);
+            request.AddObject(data);
+            // execute the request
+            var response = client.Execute<T>(request);
+            return response;
+        }
+        private static RestRequest CreateRestRequest(Method method, int timeout = 30000)
+        {
+            var request = new RestRequest
+            {
+                Method = method,
+                RequestFormat = DataFormat.Json,
+                Timeout = timeout
+            };
+            return request;
         }
     }
 }

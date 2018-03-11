@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace LiqPay.Models.Requests
 {
@@ -7,7 +8,8 @@ namespace LiqPay.Models.Requests
         [JsonProperty("amount")]
         public decimal Amount { get; set; }
         [JsonProperty("currency")]
-        public string Currency { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public Currency Currency { get; set; }
         [JsonProperty("description")]
         public string Description { get; set; }
         [JsonProperty("order_id")]
@@ -18,6 +20,9 @@ namespace LiqPay.Models.Requests
         public string Ip { get; set; }
         [JsonProperty("language", NullValueHandling = NullValueHandling.Ignore)]
         public string Language { get; set; }
+        /// <summary>
+        /// "1" or null
+        /// </summary>
         [JsonProperty("sandbox", NullValueHandling = NullValueHandling.Ignore)]
         public string Sandbox { get; set; }
         [JsonProperty("server_url", NullValueHandling = NullValueHandling.Ignore)]

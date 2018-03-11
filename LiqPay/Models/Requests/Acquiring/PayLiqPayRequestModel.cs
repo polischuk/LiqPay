@@ -1,8 +1,9 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace LiqPay.Models.Requests.Acquiring
 {
-    public class HoldLiqPayRequestModel : BaseLiqPayRequestModel
+    public class PayLiqPayRequestModel : BaseLiqPayRequestModel
     {
         [JsonProperty("order_id")]
         public string OrderId { get; set; }
@@ -11,7 +12,8 @@ namespace LiqPay.Models.Requests.Acquiring
         [JsonProperty("amount")]
         public decimal Amount { get; set; }
         [JsonProperty("currency")]
-        public string Currency { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public Currency Currency { get; set; }
         [JsonProperty("description")]
         public string Description { get; set; }
         [JsonProperty("card")]
@@ -26,6 +28,9 @@ namespace LiqPay.Models.Requests.Acquiring
         public string Ip { get; set; }
         [JsonProperty("language", NullValueHandling = NullValueHandling.Ignore)]
         public string Language { get; set; }
+        /// <summary>
+        /// "1" or null
+        /// </summary>
         [JsonProperty("sandbox", NullValueHandling = NullValueHandling.Ignore)]
         public string Sandbox { get; set; }
         [JsonProperty("prepare", NullValueHandling = NullValueHandling.Ignore)]
@@ -50,18 +55,22 @@ namespace LiqPay.Models.Requests.Acquiring
         public string SenderPostalCode { get; set; }
         #endregion
 
-        #region ReceiverParameters
-        [JsonProperty("receiver_first_name", NullValueHandling = NullValueHandling.Ignore)]
-        public string ReceiverFirstName { get; set; }
-        [JsonProperty("receiver_last_name", NullValueHandling = NullValueHandling.Ignore)]
-        public string ReceiverLastName { get; set; }
-        #endregion
-
         #region 3DSParameters
         [JsonProperty("mpi_pares", NullValueHandling = NullValueHandling.Ignore)]
         public string MpiPares { get; set; }
         [JsonProperty("mpi_md", NullValueHandling = NullValueHandling.Ignore)]
         public string MpiMd { get; set; }
+        #endregion
+
+        #region ProductParameters
+        [JsonProperty("product_url", NullValueHandling = NullValueHandling.Ignore)]
+        public string ProductUrl { get; set; }
+        [JsonProperty("product_category", NullValueHandling = NullValueHandling.Ignore)]
+        public string ProductCategory { get; set; }
+        [JsonProperty("product_name", NullValueHandling = NullValueHandling.Ignore)]
+        public string ProductName { get; set; }
+        [JsonProperty("product_description", NullValueHandling = NullValueHandling.Ignore)]
+        public string ProductDescription { get; set; }
         #endregion
 
         #region OtherParameters
@@ -74,6 +83,5 @@ namespace LiqPay.Models.Requests.Acquiring
         [JsonProperty("split_rules", NullValueHandling = NullValueHandling.Ignore)]
         public string SplitRules { get; set; }
         #endregion
-
     }
 }
